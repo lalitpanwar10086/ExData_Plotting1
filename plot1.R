@@ -1,0 +1,37 @@
+ls()
+rm(list=ls())
+getwd()
+## set working directory
+setwd("C:/Users/lalit/OneDrive/Desktop/eda/project1")
+
+
+library("ggplot2", lib.loc="~/R/win-library/3.5")
+library("sweep", lib.loc="~/R/win-library/3.5")
+library("timetk", lib.loc="~/R/win-library/3.5")
+library("dplyr", lib.loc="~/R/win-library/3.5")
+library("readr", lib.loc="~/R/win-library/3.5")
+library("data.table", lib.loc="~/R/win-library/3.5")
+library("TSA", lib.loc="~/R/win-library/3.5")
+library("lubridate", lib.loc="~/R/win-library/3.5")
+library("caret", lib.loc="~/R/win-library/3.5")
+library("zoo", lib.loc="~/R/win-library/3.5")
+
+train<-fread("household_power_consumption.txt")
+train$Date<-as.Date(train$Date, format = "%d/%m/%Y")
+train<-filter(train, Date=="2007-02-01"| Date=="2007-02-02")
+train$datetime<-paste(train$Date, train$Time)
+train$datetime<-strptime(train$datetime, format = "%Y-%m-%d %H:%M:%S")
+
+train$Global_active_power<-as.numeric(train$Global_active_power)
+train$Global_reactive_power<-as.numeric(train$Global_reactive_power)
+train$Voltage<-as.numeric(train$Voltage)
+train$Global_intensity<-as.numeric(train$Global_intensity)
+train$Sub_metering_1<-as.numeric(train$Sub_metering_1)
+train$Sub_metering_2<-as.numeric(train$Sub_metering_2)
+train$Sub_metering_3<-as.numeric(train$Sub_metering_3)
+## 1 
+par(mfrow = c(1,1))
+png("plot1.png")
+hist(train$Global_active_power, bin=1, main = "Global Active Power",
+     xlab = "Global Active Power (Kilowatts)", col = "red")
+dev.off()
